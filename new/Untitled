@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<script>window.onmessage = function(event) {event.source.postMessage({iframeId: event.data, scrollHeight: document.body.getBoundingClientRect().height || document.body.scrollHeight}, event.origin);};</script><body style='margin: 0'><!DOCTYPE html>
 <html  lang="en">
 <head>
     <meta charset="utf-8">
@@ -12,17 +12,13 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     
-    <script title="gptFunctions" crossorigin="anonymous" type="text/javascript" src="../PAALS/chatGPTFunctions.js" crossorigin></script>
+    <script title="gptFunctions" crossorigin="use-credentials" type="text/javascript" src="../PAALS/chatGPTFunctions.js" crossorigin></script>
     
     <script title="userDefaults" type="text/javascript">
         //<![CDATA[
 
-            let outputElement = document.getElementById('output');
-            outputElement.value = "";
-
-
             let sandbox = document.getElementById("iframe-078496").attributes.getNamedItem("sandbox");
-            document.getElementById('output').innerHTML = sandbox.attributes.data; //('allow-presentation');
+            document.getElementById('output').innerHTML = "TESTING"; //sandbox.ATTRIBUTE_NODE.toString() //.valueOf('allow-presentation');
             
             //this.window.frameElement.
 
@@ -188,3 +184,4 @@
 
 </html>
 
+</body>
