@@ -1,0 +1,18 @@
+{
+  "name": "paals",
+  "version": "1.0.0",
+  "description": "The service for PAALS.co",
+  "main": "chatGPTFunctions.js",
+  "scripts": {
+    "test": "loadPage()"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "paals"
+  ],
+  "author": "Tyler Hostager",
+  "license": "MIT"
+}
