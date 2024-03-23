@@ -1,35 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html  lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta property="og:title" content="PAALs AI Lesson Plan Generator">
+    <meta properety="og:type" content="website">
+    <title>PAALs A.I. Assisted Lesson Planning Tools</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-    <!--
- <script type="text/javascript" src="chatGPTFunctions.js"></script>
-    <script type="text/javascript">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script title="gptFunctions" crossorigin="use-credentials" type="text/javascript" src="../PAALS/chatGPTFunctions.js"></script>
+    
+    <script title="userDefaults" type="text/javascript">
         //<![CDATA[
+
+            class Defaults extends Object {
+                currentMsg = String();
+
+                Defaults() {
+                    this.currentMsg = Defaults.AI_DEFAULT_PROMPT;
+                }
+
+                static AI_DEFAULT_PROMPT = "Create a lesson plan for learning about the war of 1812 in a 6th grade classroom, with project or homework options for visual, auditory, reading, and kinesthetic learners.";
+            }
+
+            
+            
         //]]>
     </script>
-</script>
-    -->
-
 </head>
-
 <body>
-    <!--
-script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" type="text/javascript"></script>
--->
     <div id='main'>
         <h1>Generate Your Lesson Plan Today!</h1>
-        <h3>Fill out the form below to create customized lesson plans below (featuring results customized by our
-            proprietary
-            VARK Assesment).</h3>
+        <h3>Fill out the form below to create customized lesson plans below (featuring results customized by our proprietary VARK Assesment).</h3>
         <br />
         <label for='ai-form'>Classroom Information:</label>
-        <form id='ai-form'>
+        <form id='ai-form' action="javascript:askChatGPT();" onsubmit="javascript:makeURLForGPT(grades, subject, topic);">
             <ul>
                 <li>
                     <div id='grade-field' class='field'>
@@ -48,7 +55,7 @@ script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" type="text/jav
                             <option value='10'>10th Grade</option>
                             <option value='11'>11th Grade</option>
                             <option value='12'>12th Grade</option>
-                            <option value=''> -- Post Secondary -- </option>
+                            <option value='13'> -- Post Secondary -- </option>
                         </select>
                     </div>
                 </li>
@@ -62,7 +69,7 @@ script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" type="text/jav
             </li>
        
                 <br />
- -->
+            -->
                 <li>
                     <label for='lesson-input'>Lesson Topic:</label>
                     <input type='text' id='lesson-input' placeholder="The war of 1812" />
@@ -84,21 +91,23 @@ script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" type="text/jav
             <!-- 
 <button id='submit-btn' onclick="loadPage()">Submit</button> 
 -->
-            <button id='submit-btn' onclick="javascript:askChatGPT()">Submit</button>
+
+<!--
+    <button id='submit-btn' onclick="javascript:askChatGPT()">Submit</button>
+-->
+            <button id='submit-btn' onclick="javascript:this.gptFunctions.askChatGPT()">Submit</button>
         </form>
     </div>
 
 
 
-    <div id="output"></div>
+    <div id="output">TEStinG</div>
 
 
     <script type="text/javascript">
         var tmpPromptInfo = document.getElementById("lesson-input");
         var tmpGradeInfo = document.getElementById('grades').value;
-        let prompt = `Create a lesson plan for learning about ${tmpPromptInfo ?? "the war of 1812"} 
-                    in a ${tmpGradeInfo ?? "6th grade classroom"}, with project or 
-                    homework options for visual, auditory, reading, and kinesthetic learners`;
+        let lessonPrompt = `Create a lesson plan for learning about ${tmpPromptInfo ?? "the war of 1812"} in a ${tmpGradeInfo ?? "6th grade classroom"}, with project or homework options for visual, auditory, reading, and kinesthetic learners`;
 
         var outDiv = document.getElementById("output");
         //alert(outDiv.innerHTML);
@@ -107,7 +116,7 @@ script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" type="text/jav
         function askChatGPT() {
             var input = document.getElementById("lesson-input").value;
             if (input.trim() === "") {
-                outDiv.value = "Please enter a query and try again.";
+                outDiv.innerHTML = "Please enter a query and try again.";
                 //alert("Please enter a query and try again.");
                 return;
             }
@@ -127,29 +136,33 @@ script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" type="text/jav
             }, {
                 headers: {
                     "Content-Type": "application/json",
-                    //"User-Agent": "ChatGPT/1.2024.066 (iOS 17.4; iPhonnne13,4; build 24714)",
-                    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15",
+                    "User-Agent": "ChatGPT/1.2024.066 (iOS 17.4; iPhonnne13,4; build 24714)",
+                    //"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15     (KHTML, like Gecko) Version/17.4 Safari/605.1.15",
                     "Authorization": "Bearer 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",
                     "Connection": "keep-alive",
-                    "Cookie": "_uasid=Z0FBQUFBQmxfRWxlNXVLX01QWGdXNjB0ejk4T25ucVZDUTBHcjlMdURpZWdFWGRVRHBrRUxfYmZHTXNwalBodC04djdJcEhPeUVRejNIdEZuMGdvb25yZC1kMGpWeWJhNVFPaDVHVUUwckwxUU9iWVhFMjEzbGViczVWWjhkOGtlQjFYMGI2TGVmeGcwcHNaVnAwTE5lbldSQlRydUFzeVFQTTVMSC03TGIzUjA3Mnp4bnhaT19qV3hjZHlsaFNzYy1NazZpaHpOQWVUaHBudlpVZThkRUt1c1hXQlNjSEdtSUlxXzExMVhLY2QyQWhVaENsWU1NZUZhUzZtNmtBejl0M1M2WkhuNGJ6TEdNQU9QUlJTeUxLcVNrdUxPX3RzMEZVbzR2UmJCXzV4NHVGQjRseEVIdXByekViZTJudE83djd2WmlKcEZOQy10QVdsU0lEbXNaU1g0WFZwWkZNWXdnPT0=; _umsid=Z0FBQUFBQmxfRWxldVRSLWw1SVJFZERvYU9SME1ielpHNF85VmtyUXBxUkVVZ1FuaUg1b0xDNDdwYjBmV3FycjZ2bHJmekhVYXh4MEpMUEo2UTZtcXpGU3lTMG02ZUJ1amhiWkFPM3lLSzYxTm1hRjBLZFNJSTVRVG5rbHFqaFZGanhSSVVfZmpicW5hRmVJcDB4MUVVZTMwcXJmd1c0UU5IYVdveWdmYkh3UVd6ejRpZzAzeVFBTGdOMUlpc2NBZ3Z3WnFiWVRfWmVfSW5ZbUV6c2VjMGtfT04tRk5IRUtxaHpaNHhhRkFmMlBPaG9Od0JKdFJIUT0=; _cfuvid=2.9TKgi586XCz7xKm9xoTTf6a9R433y13Idk6qar63k-1711032456616-0.0.1.1-604800000; __cf_bm=4kukNHaeqLFtLL2aTr134PIapas75u6e5PuI4AKBp40-1711032452-1.0.1.1-RzUPN2tlsMk__ndaMjNoqUScLORJmwjBxHCpGu.p5tkyEp2SilPUX8SjmvmY.Z0X0Dq4jlKUUls.7XH3eNPG9A; _devicecheck=user-KMFAk2PcE5OnP6cRM3jYLntX:1711032262-RfMwEBfwCNVBB8rKjB8jmOGDvkdaeJ4UMEQewjnmuuM=",
+                    //"Cookie": "_uasid=Z0FBQUFBQmxfRWxlNXVLX01QWGdXNjB0ejk4T25ucVZDUTBHcjlMdURpZWdFWGRVRHBrRUxfYmZHTXNwalBodC04djdJcEhPeUVRejNIdEZuMGdvb25yZC1kMGpWeWJhNVFPaDVHVUUwckwxUU9iWVhFMjEzbGViczVWWjhkOGtlQjFYMGI2TGVmeGcwcHNaVnAwTE5lbldSQlRydUFzeVFQTTVMSC03TGIzUjA3Mnp4bnhaT19qV3hjZHlsaFNzYy1NazZpaHpOQWVUaHBudlpVZThkRUt1c1hXQlNjSEdtSUlxXzExMVhLY2QyQWhVaENsWU1NZUZhUzZtNmtBejl0M1M2WkhuNGJ6TEdNQU9QUlJTeUxLcVNrdUxPX3RzMEZVbzR2UmJCXzV4NHVGQjRseEVIdXByekViZTJudE83djd2WmlKcEZOQy10QVdsU0lEbXNaU1g0WFZwWkZNWXdnPT0=; _umsid=Z0FBQUFBQmxfRWxldVRSLWw1SVJFZERvYU9SME1ielpHNF85VmtyUXBxUkVVZ1FuaUg1b0xDNDdwYjBmV3FycjZ2bHJmekhVYXh4MEpMUEo2UTZtcXpGU3lTMG02ZUJ1amhiWkFPM3lLSzYxTm1hRjBLZFNJSTVRVG5rbHFqaFZGanhSSVVfZmpicW5hRmVJcDB4MUVVZTMwcXJmd1c0UU5IYVdveWdmYkh3UVd6ejRpZzAzeVFBTGdOMUlpc2NBZ3Z3WnFiWVRfWmVfSW5ZbUV6c2VjMGtfT04tRk5IRUtxaHpaNHhhRkFmMlBPaG9Od0JKdFJIUT0=; _cfuvid=2.9TKgi586XCz7xKm9xoTTf6a9R433y13Idk6qar63k-1711032456616-0.0.1.1-604800000; __cf_bm=4kukNHaeqLFtLL2aTr134PIapas75u6e5PuI4AKBp40-1711032452-1.0.1.1-RzUPN2tlsMk__ndaMjNoqUScLORJmwjBxHCpGu.p5tkyEp2SilPUX8SjmvmY.Z0X0Dq4jlKUUls.7XH3eNPG9A; _devicecheck=user-KMFAk2PcE5OnP6cRM3jYLntX:1711032262-RfMwEBfwCNVBB8rKjB8jmOGDvkdaeJ4UMEQewjnmuuM="
                 }
-            })
-            .then(function (response) {
+            }).then(function (response) {
                 document.getElementById("output").innerHTML = response.data.choices[0].text.trim();
-            })
-            .catch(function (error) {
+            }).catch(function (error) {
                 console.error("ERROR: ", error);
-                alert(`ERROR: Unable too execute at this time.\n${console.error.message}`);
+                //alert(`ERROR: Unable too execute at this time.\n${error.message}`);
             });
         }
 
         function loadPage() {
             var btn = document.getElementById("submit-btn");
-            //alert('test');
-            document.getElementById('lesson-input').value = prompt;// ?? "Create a lesson plan for learning about the war of 1812 in a 6th grade classroom, with project or homework options for visual, auditory, reading, and kinesthetic learners";
+            let lessonInput = document.getElementById('lesson-input');
+            lessonInput.value = this.lessonPrompt ?? Defaults.AI_DEFAULT_PROMPT ?? "";
+            
+            if (lessonInput.value === "") {
+                lessonInput.placeholder = "The war of 1812";
+            }
+
+            
         }
 
-        loadPage();
+        //loadPage();
 
         (function () {
             loadPage();
@@ -158,4 +171,8 @@ script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" type="text/jav
     </script>
 </body>
 
+<footer>
+</footer>
+
 </html>
+
