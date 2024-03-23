@@ -38,7 +38,6 @@ let initHandshakeFunc = (() => {
     var tmp = "";
 
 
-
     return tmp ?? "empty";
 })();
 
