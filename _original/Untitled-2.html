@@ -1,11 +1,13 @@
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" type="text/javascript"></script>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" type="text/javascript"></script>
-    
+
     <!--
     <script type="text/javascript" src="chatGPTFunctions.js"></script>
     <script type="text/javascript">
@@ -17,8 +19,9 @@
     "></script>
     -->
 </head>
+
 <body>
-    <<!--script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" type="text/javascript"></script>-->
+    <!--script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" type="text/javascript"></script>-->
     <div id='main'>
         <h1>Generate Your Lesson Plan Today!</h1>
         <h3>Fill out the form below to create customized lesson plans below (featuring results customized by our
@@ -50,6 +53,7 @@
                     </div>
                 </li>
                 <br />
+
                 <!--
             <li>
                 <div id='subject-field' class='subject'>
@@ -63,7 +67,8 @@
                     <input type='text' id='lesson-input' placeholder="The war of 1812" />
                 </li>
 
-                <!--
+
+                <!--     
     <li>
     <div id='chatgpt-interface' class='chatgpt'>
     <div id='chatgpt-title' class='chatgpt'>
@@ -71,18 +76,34 @@
     </div>
     </div>
     </li>
-    -->
+   -->
 
             </ul>
             <br />
-            <!-- <button id='submit-btn' onclick="loadPage()">Submit</button> -->
+            <!-- 
+<button id='submit-btn' onclick="loadPage()">Submit</button> 
+-->
             <button id='submit-btn' onclick="askChatGPT()">Submit</button>
         </form>
     </div>
+
+
+
     <div id="output"></div>
 
 
     <script type="text/javascript">
+        document.m
+
+        var tmpPromptInfo = document.getElementById("lesson-input");
+        var tmpGradeInfo = document.getElementById('grades').value;
+        let prompt = `Create a lesson plan for learning about ${tmpPromptInfo ?? "the war of 1812"} 
+                    in a ${tmpGradeInfo ?? "6th grade classroom"}, with project or 
+                    homework options for visual, auditory, reading, and kinesthetic learners`;
+
+        var outDiv = document.getElementById("Output");
+        alert(outDiv.innerHTML);
+
         function askChatGPT() {
             var input = document.getElementById("lesson-input").value;
             if (input.trim() === "") {
@@ -108,23 +129,24 @@
                     "User-Agent": "ChatGPT/1.2024.066 (iOS 17.4; iPhonnne13,4; build 24714)",
                     "Authorization": "Bearer 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",
                     "Connection": "keep-alive",
-                    "Cookie": "_uasid=\"Z0FBQUFBQmxfRWxlNXVLX01QWGdXNjB0ejk4T25ucVZDUTBHcjlMdURpZWdFWGRVRHBrRUxfYmZHTXNwalBodC04djdJcEhPeUVRejNIdEZuMGdvb25yZC1kMGpWeWJhNVFPaDVHVUUwckwxUU9iWVhFMjEzbGViczVWWjhkOGtlQjFYMGI2TGVmeGcwcHNaVnAwTE5lbldSQlRydUFzeVFQTTVMSC03TGIzUjA3Mnp4bnhaT19qV3hjZHlsaFNzYy1NazZpaHpOQWVUaHBudlpVZThkRUt1c1hXQlNjSEdtSUlxXzExMVhLY2QyQWhVaENsWU1NZUZhUzZtNmtBejl0M1M2WkhuNGJ6TEdNQU9QUlJTeUxLcVNrdUxPX3RzMEZVbzR2UmJCXzV4NHVGQjRseEVIdXByekViZTJudE83djd2WmlKcEZOQy10QVdsU0lEbXNaU1g0WFZwWkZNWXdnPT0=\"; _umsid=\"Z0FBQUFBQmxfRWxldVRSLWw1SVJFZERvYU9SME1ielpHNF85VmtyUXBxUkVVZ1FuaUg1b0xDNDdwYjBmV3FycjZ2bHJmekhVYXh4MEpMUEo2UTZtcXpGU3lTMG02ZUJ1amhiWkFPM3lLSzYxTm1hRjBLZFNJSTVRVG5rbHFqaFZGanhSSVVfZmpicW5hRmVJcDB4MUVVZTMwcXJmd1c0UU5IYVdveWdmYkh3UVd6ejRpZzAzeVFBTGdOMUlpc2NBZ3Z3WnFiWVRfWmVfSW5ZbUV6c2VjMGtfT04tRk5IRUtxaHpaNHhhRkFmMlBPaG9Od0JKdFJIUT0=\"; _cfuvid=2.9TKgi586XCz7xKm9xoTTf6a9R433y13Idk6qar63k-1711032456616-0.0.1.1-604800000; __cf_bm=4kukNHaeqLFtLL2aTr134PIapas75u6e5PuI4AKBp40-1711032452-1.0.1.1-RzUPN2tlsMk__ndaMjNoqUScLORJmwjBxHCpGu.p5tkyEp2SilPUX8SjmvmY.Z0X0Dq4jlKUUls.7XH3eNPG9A; _devicecheck=user-KMFAk2PcE5OnP6cRM3jYLntX:1711032262-RfMwEBfwCNVBB8rKjB8jmOGDvkdaeJ4UMEQewjnmuuM%3D"
+                    //"Cookie": "_uasid=\"Z0FBQUFBQmxfRWxlNXVLX01QWGdXNjB0ejk4T25ucVZDUTBHcjlMdURpZWdFWGRVRHBrRUxfYmZHTXNwalBodC04djdJcEhPeUVRejNIdEZuMGdvb25yZC1kMGpWeWJhNVFPaDVHVUUwckwxUU9iWVhFMjEzbGViczVWWjhkOGtlQjFYMGI2TGVmeGcwcHNaVnAwTE5lbldSQlRydUFzeVFQTTVMSC03TGIzUjA3Mnp4bnhaT19qV3hjZHlsaFNzYy1NazZpaHpOQWVUaHBudlpVZThkRUt1c1hXQlNjSEdtSUlxXzExMVhLY2QyQWhVaENsWU1NZUZhUzZtNmtBejl0M1M2WkhuNGJ6TEdNQU9QUlJTeUxLcVNrdUxPX3RzMEZVbzR2UmJCXzV4NHVGQjRseEVIdXByekViZTJudE83djd2WmlKcEZOQy10QVdsU0lEbXNaU1g0WFZwWkZNWXdnPT0=\"; _umsid=\"Z0FBQUFBQmxfRWxldVRSLWw1SVJFZERvYU9SME1ielpHNF85VmtyUXBxUkVVZ1FuaUg1b0xDNDdwYjBmV3FycjZ2bHJmekhVYXh4MEpMUEo2UTZtcXpGU3lTMG02ZUJ1amhiWkFPM3lLSzYxTm1hRjBLZFNJSTVRVG5rbHFqaFZGanhSSVVfZmpicW5hRmVJcDB4MUVVZTMwcXJmd1c0UU5IYVdveWdmYkh3UVd6ejRpZzAzeVFBTGdOMUlpc2NBZ3Z3WnFiWVRfWmVfSW5ZbUV6c2VjMGtfT04tRk5IRUtxaHpaNHhhRkFmMlBPaG9Od0JKdFJIUT0=\"; _cfuvid=2.9TKgi586XCz7xKm9xoTTf6a9R433y13Idk6qar63k-1711032456616-0.0.1.1-604800000; __cf_bm=4kukNHaeqLFtLL2aTr134PIapas75u6e5PuI4AKBp40-1711032452-1.0.1.1-RzUPN2tlsMk__ndaMjNoqUScLORJmwjBxHCpGu.p5tkyEp2SilPUX8SjmvmY.Z0X0Dq4jlKUUls.7XH3eNPG9A; _devicecheck=user-KMFAk2PcE5OnP6cRM3jYLntX:1711032262-RfMwEBfwCNVBB8rKjB8jmOGDvkdaeJ4UMEQewjnmuuM="
+                    "Cookie": "_uasid=Z0FBQUFBQmxfRWxlNXVLX01QWGdXNjB0ejk4T25ucVZDUTBHcjlMdURpZWdFWGRVRHBrRUxfYmZHTXNwalBodC04djdJcEhPeUVRejNIdEZuMGdvb25yZC1kMGpWeWJhNVFPaDVHVUUwckwxUU9iWVhFMjEzbGViczVWWjhkOGtlQjFYMGI2TGVmeGcwcHNaVnAwTE5lbldSQlRydUFzeVFQTTVMSC03TGIzUjA3Mnp4bnhaT19qV3hjZHlsaFNzYy1NazZpaHpOQWVUaHBudlpVZThkRUt1c1hXQlNjSEdtSUlxXzExMVhLY2QyQWhVaENsWU1NZUZhUzZtNmtBejl0M1M2WkhuNGJ6TEdNQU9QUlJTeUxLcVNrdUxPX3RzMEZVbzR2UmJCXzV4NHVGQjRseEVIdXByekViZTJudE83djd2WmlKcEZOQy10QVdsU0lEbXNaU1g0WFZwWkZNWXdnPT0=; _umsid=Z0FBQUFBQmxfRWxldVRSLWw1SVJFZERvYU9SME1ielpHNF85VmtyUXBxUkVVZ1FuaUg1b0xDNDdwYjBmV3FycjZ2bHJmekhVYXh4MEpMUEo2UTZtcXpGU3lTMG02ZUJ1amhiWkFPM3lLSzYxTm1hRjBLZFNJSTVRVG5rbHFqaFZGanhSSVVfZmpicW5hRmVJcDB4MUVVZTMwcXJmd1c0UU5IYVdveWdmYkh3UVd6ejRpZzAzeVFBTGdOMUlpc2NBZ3Z3WnFiWVRfWmVfSW5ZbUV6c2VjMGtfT04tRk5IRUtxaHpaNHhhRkFmMlBPaG9Od0JKdFJIUT0=; _cfuvid=2.9TKgi586XCz7xKm9xoTTf6a9R433y13Idk6qar63k-1711032456616-0.0.1.1-604800000; __cf_bm=4kukNHaeqLFtLL2aTr134PIapas75u6e5PuI4AKBp40-1711032452-1.0.1.1-RzUPN2tlsMk__ndaMjNoqUScLORJmwjBxHCpGu.p5tkyEp2SilPUX8SjmvmY.Z0X0Dq4jlKUUls.7XH3eNPG9A; _devicecheck=user-KMFAk2PcE5OnP6cRM3jYLntX:1711032262-RfMwEBfwCNVBB8rKjB8jmOGDvkdaeJ4UMEQewjnmuuM=",
                 }
             })
-            .then(function(response) {
-                document.getElementById("output").innerHTML = response.data.choices[0].text.trim();
-            })
-            .catch(function(error) {
-                console.error("ERROR: ", error);
-                alert(`ERROR: Unable too execute at this time.\n${console.error.message}`);
-            });
+                .then(function (response) {
+                    document.getElementById("output").innerHTML = response.data.choices[0].text.trim();
+                })
+                .catch(function (error) {
+                    console.error("ERROR: ", error);
+                    alert(`ERROR: Unable too execute at this time.\n${console.error.message}`);
+                });
         }
 
         function loadPage() {
             var btn = document.getElementById("submit-btn");
             //alert('test');
 
-            //document.getElementById('')
+            document.getElementById('lesson-input').value = prompt ?? "Create a lesson plan for learning about the war of 1812 in a 6th grade classroom, with project or homework options for visual, auditory, reading, and kinesthetic learners";
         }
 
         loadPage();
@@ -134,13 +156,6 @@
         })();
 
     </script>
-
-
-
-
 </body>
-<footer>
-
-</footer>
 
 </html>
