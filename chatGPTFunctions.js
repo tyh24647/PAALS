@@ -1,3 +1,5 @@
+
+
 /**
  * chatGPTFunctions provides the functionality for the chatgpt interaction
  * in a contained sandbox implementation to be loaded in whenever necessary to
@@ -57,6 +59,7 @@ if (tmp) {
     alert(tmp);
     window.alert(tmp);
 }
+
 alert("TMP: " + tmp);
 
 /*
