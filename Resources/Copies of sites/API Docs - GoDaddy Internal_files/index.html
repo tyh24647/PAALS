@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!-- saved from url=(0071)https://img1.wsimg.com/dc-assets/dc-cms-bundle-storage/1.1.2/index.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  <script>
+
+    (() => {
+      const postMessage = (type, key = '', value = '') => {
+        parent.postMessage(
+          JSON.stringify(
+            { type, key, value }
+          ),
+          '*'
+        );
+      }
+
+      window.addEventListener('message', (message) => {
+
+        if (message.origin.endsWith('godaddy.com')) {
+          let parsedData = {};
+
+          try {
+            parsedData = JSON.parse(message.data);
+          } catch (error) {}
+
+          if (parsedData && parsedData.type) {
+            let storage;
+            try {
+              // Wrap in try/catch because trying to access localStorage or sessionStorage can throw an error in a private browser window              
+              storage = parsedData.scope === 'local' ? window.localStorage : window.sessionStorage;
+            } catch (error) {}
+
+            if (storage) {
+              switch (parsedData.type) {
+                case 'dc-storage-set':
+                  storage.setItem(parsedData.key, JSON.stringify(parsedData.value));
+                  break;
+                case 'dc-storage-get':
+                  postMessage('dc-storage-get-return', parsedData.key, storage.getItem(parsedData.key));
+                  break;
+                case 'dc-storage-remove':
+                  storage.removeItem(parsedData.key);
+                  break;
+                default:
+              }
+            }
+          }
+        }
+      });
+
+      postMessage('dc-storage-ready');
+    })();
+
+  </script>
+</head>
+<body data-new-gr-c-s-check-loaded="14.1163.0" data-gr-ext-installed="">
+
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"><template shadowrootmode="open"><style>
+      div.grammarly-desktop-integration {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select:none;
+        user-select:none;
+      }
+
+      div.grammarly-desktop-integration:before {
+        content: attr(data-content);
+      }
+    </style><div aria-label="grammarly-integration" role="group" tabindex="-1" class="grammarly-desktop-integration" data-content="{&quot;mode&quot;:&quot;full&quot;,&quot;isActive&quot;:true,&quot;isUserDisabled&quot;:false}"></div></template></grammarly-desktop-integration></html>

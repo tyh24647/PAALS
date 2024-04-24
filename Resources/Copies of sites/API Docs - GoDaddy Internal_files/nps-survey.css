@@ -1,0 +1,41 @@
+#nps-survey-button {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+#nps-survey {
+	bottom: 0;
+	display: none;
+	left: 10px;
+	margin: 0;
+	max-width: 500px;
+	padding: 20px;
+	position: absolute;
+	z-index: 9999;
+}
+
+.survey-question {
+	font-size: 1.4em;
+	margin: 0;
+}
+
+.survey-score-options {
+	font-size: 1.4em;
+	width: 100%;
+}
+
+.survey-score-options tr th, .survey-score-options tr td {
+	font-weight: normal;
+	text-align: center;
+	width: 9%;
+}
+
+#survey-reason {
+	height: 10em;
+	padding: 0.5em;
+	width: 100%;
+}
+
+.survey-note {
+	font-size: 0.9em;
+}
