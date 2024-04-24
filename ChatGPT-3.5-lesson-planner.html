@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>ChatGPT</title>
+	<style type="text/css">
+		html, body{
+			min-width: 320px;
+			text-align: center;
+			font-family: Courier New;
+		}
+		.wrapper {
+			width: 100%;
+			display: inline-flex;
+			text-align: left;
+		}
+		.container {
+			width: 90%;
+			margin: 0 auto;
+			position: relative;
+		}
+	</style>
+	<script>
+		const userAction = async () => {
+			const reply = "" + document.forms["input"]["reply"].value;
+			const input = "" + document.forms["input"]["input"].value;
+			const reponse = await fetch('https://api.openai.com/v1/chat/completions', {
+				method: "POST",
+				body: JSON.stringify({"model": "gpt-3.5-turbo", "messages": 
+					[{"role":"assistant","content": reply},
+					 {"role":"user","content": input}
+					]}),
+				headers: {
+					"content-type": "application/json",
+					Authorization: "Bearer sk-proj-LNWmLTlb324Cg4znzZPtT3BlbkFJf6j7G05LQDxcLRLnZIPn",
+				}
+			}).then((response) => {
+				if (response.ok) {
+					response.json().then((json) => {
+						const AnswerLog=[document.getElementById("output").innerHTML,
+							"<br><br>ME: ",input,"<br><br>AI: ",json.choices[0].message.content];
+						document.forms["input"]["reply"].value = json.choices[0].message.content;
+						document.forms["input"]["input"].value = "";
+						document.getElementById("output").innerHTML = AnswerLog.join("");
+					});
+				}
+			});
+		}
+	</script>
+</head>
+<body>
+	<div class = "wrapper">
+		<div class = "container">
+			<p id="output" style="white-space: pre-wrap;"></p>
+			<form id="input">
+				<input name="reply" placeholder="" readonly style="display: none;">
+				<input name="input" autofocus placeholder="User input" onchange="userAction()" style="width: 95%;"><br>
+			</form>
+		</div>
+	</div>
+</body>
+</html> 
