@@ -38,7 +38,7 @@
 							"<br><br>Lesson Topic: ", input,
 							"<br><br>Lesson Plan: ", json.choices[0].message.content
 						];
-						document.forms["input"]["topic"].value = "";
+						document.forms["input"]["topic-input"].value = "";
 						document.getElementById("output").innerHTML = AnswerLog.join("");
 						document.forms["input"]["reply"].value = json.choices[0].message.content;
 					});
@@ -85,10 +85,11 @@
 					</select>
 				</div>
 				<div id="form-inputs">
+					<br>
 					<label for="topic-input">Lesson topic: </label>
-					<input name="topic" id="topic-input" autofocus placeholder="The war of 1812" onchange="userAction()" >
+					<input name="topic-input" autofocus placeholder="The war of 1812" onchange="userAction()" >  <!-- style="width: 95%;"><br> -->
 					<br><br>
-					<button id="submit-btn" type="button" title="Submit" onclick="generateResults()" method="post">Submit</button>
+					<button id="submit-btn" type="button" title="Submit" onclick="generateResults()" method="post">Submit</button>  <!-- </button> onclick="generateResults()">Submit</button>-->
 					<br><br>
 					<input name="reply" placeholder="" readonly style="display: none;">
 				</div>
