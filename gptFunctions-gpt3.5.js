@@ -11,7 +11,7 @@ const userAction = async () => {
     const grade = "" + document.forms["input"]["grades"].value;
     const reply = "" + document.forms["input"]["reply"].value;
     const promptStr  = `Create a lesson plan for learning about ${input} in a ${grade} classroom, with project or homework options for visual, auditory, reading, and kinesthetic learners.`
-    const reponse = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: "POST",
         body: JSON.stringify({
             "model": "gpt-3.5-turbo", 
@@ -42,10 +42,15 @@ const userAction = async () => {
             });
         }
     });
+
+    await alert(response);
 }
 
 async function generateResults() {			
     console.log(">  Generating chatGPT results...");			
     alert("Generating output with the given pompts.\nthis may take a few moments...");
     console.log("> Updated  prompt: " + document.URL.toString());
+
+    
 }
+

@@ -26,7 +26,8 @@
 						}
 					]}),
 				headers: {
-					"content-type": "application/json",
+					"Content-Type": "application/json",
+					"Connection": "keep-alive",
 					Authorization: "Bearer sk-proj-7KiQQPfIxqLnQY8EM8sDT3BlbkFJiwEctttcio0zTsukNJkP",
 				}
 			}).then((response) => {
@@ -41,6 +42,8 @@
 						document.getElementById("output").innerHTML = AnswerLog.join("");
 						document.forms["input"]["reply"].value = json.choices[0].message.content;
 					});
+				} else {
+					alert("ERROR: " + response.statusText);
 				}
 			});
 		}
@@ -81,7 +84,7 @@
 						<option value='13'> -- Post Secondary -- </option>
 					</select>
 				</div>
-				<div id="forrm-inputs">
+				<div id="form-inputs">
 					<br>
 					<label for="topic-input">Lesson topic: </label>
 					<input name="topic-input" autofocus placeholder="The war of 1812" onchange="userAction()" >  <!-- style="width: 95%;"><br> -->
