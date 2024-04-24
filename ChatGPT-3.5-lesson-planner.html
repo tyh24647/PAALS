@@ -1,60 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>ChatGPT</title>
-	<style type="text/css">
-		html, body{
-			min-width: 320px;
-			text-align: center;
-			font-family: Courier New;
-		}
-		.wrapper {
-			width: 100%;
-			display: inline-flex;
-			text-align: left;
-		}
-		.container {
-			width: 90%;
-			margin: 0 auto;
-			position: relative;
-		}
-	</style>
-	<script>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta property="og:title" content="PAALs AI Lesson Plan Generator">
+	<title>ChatGPT-3.5-lesson-planner</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script type="text/javascript">
 		const userAction = async () => {
+			const input = "" + document.forms["input"]["topic-input"].value;
+			const grade = "" + document.forms["input"]["grades"].value;
 			const reply = "" + document.forms["input"]["reply"].value;
-			const input = "" + document.forms["input"]["input"].value;
+			const promptStr  = `Create a lesson plan for learning about ${input} in a ${grade} classroom, with project or homework options for visual, auditory, reading, and kinesthetic learners.`
 			const reponse = await fetch('https://api.openai.com/v1/chat/completions', {
 				method: "POST",
-				body: JSON.stringify({"model": "gpt-3.5-turbo", "messages": 
-					[{"role":"assistant","content": reply},
-					 {"role":"user","content": input}
+				body: JSON.stringify({
+					"model": "gpt-3.5-turbo", 
+					"messages": [{
+							"role":"assistant",
+							"content": reply
+						}, {
+							"role":"user",
+							"content": promptStr
+						}
 					]}),
 				headers: {
 					"content-type": "application/json",
-					Authorization: "Bearer sk-proj-LNWmLTlb324Cg4znzZPtT3BlbkFJf6j7G05LQDxcLRLnZIPn",
+					Authorization: "Bearer sk-proj-7KiQQPfIxqLnQY8EM8sDT3BlbkFJiwEctttcio0zTsukNJkP",
 				}
 			}).then((response) => {
 				if (response.ok) {
 					response.json().then((json) => {
-						const AnswerLog=[document.getElementById("output").innerHTML,
-							"<br><br>ME: ",input,"<br><br>AI: ",json.choices[0].message.content];
-						document.forms["input"]["reply"].value = json.choices[0].message.content;
-						document.forms["input"]["input"].value = "";
+						const AnswerLog = [
+							document.getElementById("output").innerHTML,
+							"<br><br>Lesson Topic: ", input,
+							"<br><br>Lesson Plan: ", json.choices[0].message.content
+						];
+						document.forms["input"]["topic-input"].value = "";
 						document.getElementById("output").innerHTML = AnswerLog.join("");
+						document.forms["input"]["reply"].value = json.choices[0].message.content;
 					});
 				}
 			});
 		}
+
+		async function generateResults(input) {			
+			console.log(">  Generating chatGPT results...");			
+			alert("Generating output with the given pompts.\nthis may take a few moments...");	
+			console.log("> Updated  prompt: " + document.URL.toString());
+		}
 	</script>
 </head>
 <body>
-	<div class = "wrapper">
-		<div class = "container">
-			<p id="output" style="white-space: pre-wrap;"></p>
+	<div class = "wrapper">	
+		<div id="title-container" style="margin-left: 5%; width: 95%;">
+			<h1>AI Lesson Plan Generator</h1>		
+			<sub>AI version: ChatGPT 3.5</sub>
+			<br><br>
+		</div>	
+		<br>
+		<div class = "container" style="width: 95%;">
 			<form id="input">
-				<input name="reply" placeholder="" readonly style="display: none;">
-				<input name="input" autofocus placeholder="User input" onchange="userAction()" style="width: 95%;"><br>
+				<div id='grade-field' class='field'>
+					<label for='grades'>Grade: </label>
+					<select name='grades' id='grades'>
+						<option value='0'>Kindergarten</option>
+						<option value='1'>1st Grade</option>
+						<option value='2'>2nd Grade</option>
+						<option value='3'>3rd Grade</option>
+						<option value='4'>4th Grade</option>
+						<option value='5'>5th Grade</option>
+						<option value='6'>6th Grade</option>
+						<option value='7'>7th Grade</option>
+						<option value='8'>8th Grade</option>
+						<option value='9'>9th Grade</option>
+						<option value='10'>10th Grade</option>
+						<option value='11'>11th Grade</option>
+						<option value='12'>12th Grade</option>
+						<option value='13'> -- Post Secondary -- </option>
+					</select>
+				</div>
+				<div id="forrm-inputs">
+					<br>
+					<label for="topic-input">Lesson topic: </label>
+					<input name="topic-input" autofocus placeholder="The war of 1812" onchange="userAction()" >  <!-- style="width: 95%;"><br> -->
+					<br><br>
+					<button id="submit-btn" type="button" title="Submit" onclick="generateResults()" method="post">Submit</button>  <!-- </button> onclick="generateResults()">Submit</button>-->
+					<br><br>
+					<input name="reply" placeholder="" readonly style="display: none;">
+				</div>
 			</form>
+			<p id="output" style="white-space: pre-wrap;"></p>
 		</div>
 	</div>
 </body>
