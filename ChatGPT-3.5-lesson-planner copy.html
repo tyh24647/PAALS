@@ -18,14 +18,19 @@
 				body: JSON.stringify({
 					"model": "gpt-3.5-turbo", 
 					"messages": [{
-							"role":"assistant",
-							"content": reply
-						}, {
-							"role":"user",
-							"content": promptStr
-						}
-					]}),
-				headers: {
+						"role":"assistant",
+						"content": reply
+					}, {
+						"role":"user",
+						"content": promptStr
+					}],
+					"temperature": 1,
+					"max_tokens": 500,
+					"top_p": 1,
+					"prompt": input,
+					"frequency_penalty": 0,
+					"presence_penalty": 0
+				}), headers: {
 					"Content-Type": "application/json",
 					"Connection": "keep-alive",
 					Authorization: "Bearer sk-proj-7KiQQPfIxqLnQY8EM8sDT3BlbkFJiwEctttcio0zTsukNJkP",
