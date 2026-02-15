@@ -1,0 +1,1285 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+	<meta property="og:title" content="PAALs AI Lesson Plan Generator">
+	<title>ChatGPT-5.2-lesson-planner</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+	<style>
+		:root {
+			--bg-color: #ffffff;
+			--text-color: #333333;
+			--container-bg: #f9f9f9;
+			--container-text: #333333;
+			--heading-color: #2c3e50;
+			--border-color: #3498db;
+			--code-bg: #e8e8e8;
+			--button-bg: #27ae60;
+			--button-hover: #229954;
+			--input-bg: #ffffff;
+			--input-text: #333333;
+			--input-border: #bdc3c7;
+			--input-focus-border: #3498db;
+			--field-bg: #f9f9f9;
+		}
+
+		body.dark-mode {
+			--bg-color: #1e1e1e;
+			--text-color: #e0e0e0;
+			--container-bg: #2d2d2d;
+			--container-text: #e0e0e0;
+			--heading-color: #64b5f6;
+			--border-color: #42a5f5;
+			--code-bg: #3d3d3d;
+			--button-bg: #4caf50;
+			--button-hover: #66bb6a;
+			--input-bg: #3a3a3a;
+			--input-text: #e0e0e0;
+			--input-border: #555555;
+			--input-focus-border: #64b5f6;
+			--field-bg: #2d2d2d;
+		}
+
+		@import url(https://fonts.googleapis.com/css?family=Roboto:300,400);
+
+		body {
+			background-color: var(--bg-color);
+			color: var(--text-color);
+			transition: background-color 0.3s ease, color 0.3s ease;
+		}
+
+		h1 {
+			font-family: 'Roboto', sans-serif;
+			font-size: 30px;
+			color: #999;
+			font-weight: 300;
+			margin-bottom: 55px;
+			margin-top: 45px;
+			text-transform: uppercase;
+		}
+
+		h1 small {
+			display: block;
+			font-size: 18px;
+			text-transform: none;
+			letter-spacing: 1.5px;
+			margin-top: 12px;
+		}
+
+		.row {
+			max-width: 950px;
+			margin: 0 auto;
+		}
+
+		.btn {
+			white-space: normal;
+		}
+
+
+		#submit-btn {
+
+			background-color: blue !important;
+			color: white !important;
+
+			z-index: 1 !important;	
+		}
+
+		.button-wrap {
+			/*
+			position: relative;
+			*/
+			
+			position: absolute;
+
+			/*
+			position: sticky;
+			*/
+			text-align: center;
+
+			btn {
+				font-family: 'Roboto', sans-serif;
+				box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.5);
+				border-radius: 0px;
+				border-color: #222;
+				cursor: pointer;
+				text-transform: uppercase;
+				font-size: 1.1em;
+				font-weight: 400;
+				letter-spacing: 1px;
+
+				small {
+					font-size: 0.8rem;
+					letter-spacing: normal;
+					text-transform: none;
+				}
+			}
+		}
+		
+
+		.loader {
+			position: relative;
+			text-align: center;
+			margin: 15px auto 35px auto;
+			z-index: 9000;
+			
+			/*
+			display: block;
+			/*
+
+			/* */
+			display: flex;
+			/* */
+			
+			width: 80px;
+			height: 80px;
+			border: 10px solid rgba(0, 0, 0, .3);
+			border-radius: 50%;
+			border-top-color: #000;
+			animation: spin 1s ease-in-out infinite;
+			-webkit-animation: spin 1s ease-in-out infinite;
+		}
+
+		.close {
+			top: 0;
+			right: 0;
+			color: #333333;
+			float: right;
+			font-size: 48px;
+			font-weight: bold;
+		}
+
+		.modal {
+			top: 0;
+			left: 0;
+			z-index: 8500;
+
+			/* The Close Button */
+
+
+			&.close .modal-dialog {
+				
+				position: absolute;
+				top: 10px;
+				right: 15px;
+				/*
+				top: 0;
+				right: 0;
+				*/
+
+				font-size: 48px;
+				font-weight: bold;
+				color: #333333;
+				cursor: pointer;
+			}
+
+			.loader {
+				border: 10px solid rgba(255, 255, 255, .3);
+				border-top-color: #fff;
+				position: relative;
+			}
+			.loader-txt p {
+				color: #fff;
+			}
+
+			.modal-content {
+				/*
+				background-color: transparent;
+				*/
+				background-color: hotpink !important;
+				border: none;
+				text-align: center;
+				padding-left: 35px;
+				padding-right: 35px;
+				padding-top: 65px;
+				padding-bottom: 0px;
+				max-width: 500px !important;
+				width: 90%;
+
+				z-index: 9876;
+			}
+
+			width: 650px !important;
+			max-width: 700px !important;
+
+			aspect-ratio:inherit;
+		}
+
+		body {
+			align-content: center;
+			/*
+			padding-left: 65px;
+			padding-right: 65px;
+			*/
+			padding-left: calc((100% - 650px) / 2);
+			padding-right: calc((100% - 650px) / 2);
+			margin-left: 65px;
+			margin-right: 65px;
+			font-family: 'Roboto', 'San Francisco', sans-serif;
+
+		}
+
+		@keyframes spin {
+			to {
+				-webkit-transform: rotate(360deg);
+			}
+		}
+
+		@-webkit-keyframes spin {
+			to {
+				-webkit-transform: rotate(360deg);
+			}
+		}
+
+
+		/** MODAL STYLING **/
+
+		.modal-content {
+			border-radius: 0px;
+			box-shadow: 0 0 20px 8px rgba(0, 0, 0, 0.7);
+			padding: 15px;
+
+			width: 400px;
+			height: 300px;
+
+
+			z-index: 9999;
+		}
+
+		.modal-backdrop.show {
+			opacity: 0.75;
+		}
+
+		.loader-txt {
+			p {
+				font-size: 13px;
+				color: #666;
+
+				small {
+					font-size: 11.5px;
+					color: #999;
+				}
+			}
+		}
+
+		/* Make the modal a positioning context */
+		#loadMe .modal-content {
+			position: relative;
+		}
+
+		/* Pin the X to the top-right with padding */
+		#loadMe .close {
+			position: absolute;
+			top: 12px;
+			right: 12px;
+			padding: 6px;        /* “click target” padding */
+			line-height: 1;
+			float: none;         /* undo the float */
+			z-index: 10000;
+		}
+
+
+
+
+		/* Make the modal content the positioning context */
+		#loadMe .modal-content {
+			position: relative;
+		}
+
+		/* Close button pinned top-right */
+		#loadMe .close {
+			position: absolute;
+			top: 12px;
+			right: 12px;
+
+			/* usability */
+			padding: 6px;
+			line-height: 1;
+
+			/* button reset-ish */
+			background: transparent;
+			border: 0;
+			cursor: pointer;
+
+			/* your existing look */
+			color: #333333;
+			font-size: 48px;
+			font-weight: bold;
+
+			float: none;
+			z-index: 10000;
+		}
+
+		#loadMe .close:hover,
+		#loadMe .close:focus {
+			color: lightgray;
+			text-decoration: none;
+			outline: none;
+		}
+
+		/* Theme toggle button */
+		#theme-toggle {
+			position: fixed;
+			top: 20px;
+			right: 20px;
+			background-color: var(--button-bg);
+			color: white;
+			padding: 10px 15px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 14px;
+			z-index: 1000;
+			transition: background-color 0.3s ease;
+		}
+
+		#theme-toggle:hover {
+			background-color: var(--button-hover);
+		}
+
+		/* Lesson plan output styling */
+		#out-container {
+			line-height: 1.6;
+			color: var(--container-text);
+			background-color: var(--container-bg);
+			padding: 20px;
+			border-radius: 5px;
+			margin-top: 30px;
+			margin-bottom: 30px;
+		}
+
+		#out-container h1 {
+			color: var(--heading-color);
+			font-size: 28px;
+			margin-top: 30px;
+			margin-bottom: 15px;
+			border-bottom: 2px solid #3498db;
+			padding-bottom: 10px;
+		}
+
+		#out-container h2 {
+			color: var(--heading-color);
+			font-size: 22px;
+			margin-top: 25px;
+			margin-bottom: 12px;
+		}
+
+		#out-container h3 {
+			color: var(--heading-color);
+			font-size: 18px;
+			margin-top: 18px;
+			margin-bottom: 10px;
+		}
+
+		#out-container ul, #out-container ol {
+			margin: 10px 0;
+			padding-left: 25px;
+		}
+
+		#out-container li {
+			margin: 8px 0;
+		}
+
+		#out-container code {
+			background-color: var(--code-bg);
+			padding: 2px 6px;
+			border-radius: 3px;
+			font-family: 'Courier New', monospace;
+		}
+
+		#out-container blockquote {
+			border-left: 4px solid var(--border-color);
+			margin-left: 10px;
+			padding-left: 15px;
+			color: #666;
+			font-style: italic;
+		}
+
+		/* Action buttons styling */
+		.lesson-action-btn {
+			background-color: var(--button-bg);
+			color: white;
+			padding: 10px 15px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 14px;
+			margin-right: 10px;
+			margin-top: 15px;
+			transition: background-color 0.3s ease;
+			display: inline-block;
+		}
+
+		.lesson-action-btn:hover {
+			background-color: var(--button-hover);
+		}
+
+		.lesson-action-btn:disabled {
+			background-color: #bdc3c7;
+			cursor: not-allowed;
+		}
+
+		#download-btn {
+			background-color: var(--button-bg);
+			color: white;
+			padding: 10px 20px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 14px;
+			margin-top: 15px;
+			transition: background-color 0.3s ease;
+		}
+
+		#download-btn:hover {
+			background-color: var(--button-hover);
+		}
+
+		#download-btn:disabled {
+			background-color: #bdc3c7;
+			cursor: not-allowed;
+		}
+
+		/* Saved lessons section */
+		#saved-lessons-container {
+			margin-top: 40px;
+			padding: 20px;
+			background-color: var(--container-bg);
+			border-radius: 5px;
+			border: 1px solid var(--border-color);
+		}
+
+		#saved-lessons-list {
+			list-style: none;
+			padding: 0;
+			margin: 15px 0;
+		}
+
+		#saved-lessons-list li {
+			padding: 12px;
+			margin: 8px 0;
+			background-color: var(--bg-color);
+			border: 1px solid var(--border-color);
+			border-radius: 4px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		#saved-lessons-list .lesson-info {
+			flex-grow: 1;
+		}
+
+		#saved-lessons-list .lesson-title {
+			font-weight: bold;
+			color: var(--heading-color);
+		}
+
+		#saved-lessons-list .lesson-meta {
+			font-size: 12px;
+			color: #999;
+			margin-top: 4px;
+		}
+
+		.lesson-item-btn {
+			background-color: #3498db;
+			color: white;
+			padding: 6px 12px;
+			border: none;
+			border-radius: 3px;
+			cursor: pointer;
+			font-size: 12px;
+			margin-left: 5px;
+			transition: background-color 0.3s ease;
+		}
+
+		.lesson-item-btn:hover {
+			background-color: #2980b9;
+		}
+
+		.lesson-item-btn.delete {
+			background-color: #e74c3c;
+		}
+
+		.lesson-item-btn.delete:hover {
+			background-color: #c0392b;
+		}
+
+		/* Form Styling */
+		input[type="text"],
+		input[type="password"],
+		input[type="email"],
+		select,
+		textarea {
+			background-color: var(--input-bg);
+			color: var(--input-text);
+			border: 1px solid var(--input-border);
+			padding: 8px 12px;
+			border-radius: 4px;
+			font-size: 14px;
+			font-family: 'Roboto', sans-serif;
+			transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+		}
+
+		input[type="text"]:focus,
+		input[type="password"]:focus,
+		input[type="email"]:focus,
+		select:focus,
+		textarea:focus {
+			outline: none;
+			border-color: var(--input-focus-border);
+			box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+		}
+
+		body.dark-mode input[type="text"]:focus,
+		body.dark-mode input[type="password"]:focus,
+		body.dark-mode input[type="email"]:focus,
+		body.dark-mode select:focus,
+		body.dark-mode textarea:focus {
+			box-shadow: 0 0 5px rgba(100, 181, 246, 0.5);
+		}
+
+		input[type="checkbox"] {
+			cursor: pointer;
+		}
+
+		label {
+			color: var(--text-color);
+			transition: color 0.3s ease;
+		}
+
+		.field {
+			background-color: var(--field-bg);
+			padding: 15px;
+			border-radius: 5px;
+			margin-bottom: 15px;
+			transition: background-color 0.3s ease;
+		}
+
+		button {
+			background-color: var(--button-bg);
+			color: white;
+			padding: 10px 20px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 14px;
+			font-family: 'Roboto', sans-serif;
+			transition: background-color 0.3s ease;
+		}
+
+		button:hover {
+			background-color: var(--button-hover);
+		}
+
+		button:disabled {
+			background-color: #bdc3c7;
+			cursor: not-allowed;
+		}
+
+		#submit {
+			background-color: var(--button-bg);
+			color: white;
+			padding: 12px 30px;
+			font-size: 16px;
+			font-weight: 500;
+		}
+
+		#submit:hover {
+			background-color: var(--button-hover);
+		}
+
+		small {
+			color: var(--text-color);
+			opacity: 0.75;
+			transition: color 0.3s ease;
+		}
+
+	</style>
+	<script type="text/javascript">
+		
+        
+        
+		// Store current lesson plan for download
+		let currentLessonPlan = {
+			id: null,
+			topic: '',
+			grade: '',
+			content: '',
+			timestamp: null
+		};
+
+		// Initialize theme and saved lessons on page load
+		window.addEventListener('DOMContentLoaded', () => {
+			const theme = localStorage.getItem('PAALS_THEME') || 'light';
+			if (theme === 'dark') {
+				document.body.classList.add('dark-mode');
+				document.getElementById('theme-toggle').textContent = '☀️ Light Mode';
+			} else {
+				document.getElementById('theme-toggle').textContent = '🌙 Dark Mode';
+			}
+			loadSavedLessonsList();
+		});
+
+		// Get API key from localStorage or use default
+		function getApiKey() {
+			const stored = localStorage.getItem('OPENAI_API_KEY');
+			if (stored && stored.trim()) {
+				return stored;
+			}
+	
+		}
+
+		// Set API key in localStorage
+		function setApiKey(key) {
+			localStorage.setItem('OPENAI_API_KEY', key);
+			console.log('API key updated');
+		}
+
+		// Hide the GIF notification by default on page load
+		window.addEventListener('DOMContentLoaded', () => {
+			document.getElementById('wp-block-themeisle-blocks-popup-52fd7daf').hidden = true;
+		});
+
+		$(document).ready(function () {
+			// Page initialization
+			console.log('Page initialized');
+			
+			// Load saved API key into input field
+			const savedKey = localStorage.getItem('OPENAI_API_KEY');
+			if (savedKey) {
+				document.getElementById('api-key-input').value = savedKey;
+			}
+		});
+
+		function updateApiKey() {
+			const keyInput = document.getElementById('api-key-input').value.trim();
+			if (!keyInput) {
+				alert('Please enter an API key');
+				return;
+			}
+			
+			if (!keyInput.startsWith('sk-')) {
+				alert('API key should start with "sk-"');
+				return;
+			}
+			
+			setApiKey(keyInput);
+			alert('API key saved successfully!');
+		}
+
+		function clearApiKey() {
+			localStorage.removeItem('OPENAI_API_KEY');
+			document.getElementById('api-key-input').value = '';
+			alert('API key cleared. The default key will be used.');
+		}
+
+		/**
+		 * Toggle between light and dark mode
+		 */
+		function toggleTheme() {
+			const isDarkMode = document.body.classList.toggle('dark-mode');
+			localStorage.setItem('PAALS_THEME', isDarkMode ? 'dark' : 'light');
+			document.getElementById('theme-toggle').textContent = isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode';
+			console.log(`Theme switched to ${isDarkMode ? 'dark' : 'light'} mode`);
+		}
+
+
+
+   /*************************************
+   * init the actions to use lator via  *
+   * making a functor obj as a constant *
+   *************************************/
+		const userAction = async () => {
+			// Reset modal state before showing it again
+			resetModalForReuse();
+
+			// Extract form values
+			const input = "" + document.forms["input"]["topic-input"].value;
+			const grade = "" + document.forms["input"]["grades"].value;
+			const complexityTokens = document.forms["input"]["complexity"].value;
+			const promptStr = `Create a lesson plan for learning about ${input} for a grade ${grade} classroom, with project or homework options for visual, auditory, reading, and kinesthetic learners.`;
+
+			// Initialize close button
+			initCloseBtn();
+
+			// Show the modal spinner
+			showModal();
+			
+			// Make the API request
+			try {
+				console.log('Sending API request...');
+				const response = await fetch('https://api.openai.com/v1/chat/completions', {
+					method: "POST",
+					body: JSON.stringify({
+						"model": "gpt-4o",
+						"messages": [{
+							"role": "user",
+							"content": promptStr
+						}],
+						"temperature": 1,
+						"max_completion_tokens": 4095,
+						"top_p": 1,
+						"frequency_penalty": 0,
+						"presence_penalty": 0
+					}),
+
+					headers: {
+						"access-control-allow-origin": "*",
+						"Content-Type": "application/json",
+						"Connection": "keep-alive",
+						"Authorization": `Bearer ${getApiKey()}`,
+					}
+				});
+
+				console.log('API Response received:', response.status);
+
+				// Hide the modal
+				closeModalLoader();
+
+				if (response.ok) {
+					const json = await response.json();
+					console.log('API Success:', json);
+					
+					const lessonPlanContent = json.choices[0].message.content;
+					
+					// Store lesson plan for download
+					currentLessonPlan = {
+						topic: input,
+						grade: grade,
+						content: lessonPlanContent
+					};
+
+				// Render markdown as HTML
+				const htmlContent = marked.parse(lessonPlanContent);
+				
+				document.getElementById("output").hidden = true;
+				document.forms["input"]["reply"].value = lessonPlanContent;
+				document.getElementById("out-container").innerHTML = htmlContent;
+				document.getElementById("download-btn").style.display = 'inline-block';
+				
+				// Show action buttons
+				document.getElementById("copy-btn").style.display = 'inline-block';
+				document.getElementById("save-btn").style.display = 'inline-block';
+			} else {
+					let status = response.status;
+					let statusText = response.statusText ?? response.toString();
+
+					console.error(`API Error: ${status} ${statusText}`);
+					
+					// Try to parse error details
+					try {
+						const errorData = await response.json();
+						console.error('Error details:', errorData);
+					} catch (e) {
+						console.error('Could not parse error response');
+					}
+				}
+			} catch (error) {
+				console.error(`Fetch error:`, error);
+				closeModalLoader();
+			}
+		}
+
+
+		/**
+		 * Generate lesson plan results when user submits the form
+		 */
+		async function generateResults(input) {
+			console.log(`> Fetching AI Results.\n>\tProcessing...\n`);
+			console.log(`> Web request URL: ${document.URL.toString()}`);
+
+			userAction();
+		}
+
+		/**
+		 * Download the lesson plan as a markdown file
+		 */
+		function downloadLesson() {
+			if (!currentLessonPlan.content) {
+				alert('No lesson plan to download. Please generate one first.');
+				return;
+			}
+
+			// Create markdown header with metadata
+			const header = `# Lesson Plan: ${currentLessonPlan.topic}\n\nGrade Level: ${currentLessonPlan.grade}\n\n---\n\n`;
+			const fullContent = header + currentLessonPlan.content;
+
+			// Create blob
+			const blob = new Blob([fullContent], { type: 'text/markdown;charset=utf-8' });
+			
+			// Create download link
+			const link = document.createElement('a');
+			link.href = URL.createObjectURL(blob);
+			
+			// Generate filename with timestamp
+			const now = new Date();
+			const dateStr = now.toISOString().split('T')[0];
+			const timeStr = now.toTimeString().split(' ')[0].replace(/:/g, '-');
+			const filename = `lesson-plan_${currentLessonPlan.topic.replace(/\s+/g, '-')}_${dateStr}_${timeStr}.md`;
+			
+			link.setAttribute('download', filename);
+			
+			// Trigger download
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+			
+			console.log(`Downloaded lesson plan: ${filename}`);
+		}
+
+		/**
+		 * Copy lesson plan to clipboard
+		 */
+		function copyToClipboard() {
+			if (!currentLessonPlan.content) {
+				alert('No lesson plan to copy. Please generate one first.');
+				return;
+			}
+
+			const header = `# Lesson Plan: ${currentLessonPlan.topic}\n\nGrade Level: ${currentLessonPlan.grade}\n\n---\n\n`;
+			const fullContent = header + currentLessonPlan.content;
+
+			navigator.clipboard.writeText(fullContent).then(() => {
+				alert('Lesson plan copied to clipboard!');
+				console.log('Copied to clipboard');
+			}).catch(() => {
+				alert('Failed to copy. Please try again.');
+			});
+		}
+
+		/**
+		 * Save the current lesson plan to localStorage
+		 */
+		function saveLessonPlan() {
+			if (!currentLessonPlan.content || !currentLessonPlan.topic) {
+				alert('No lesson plan to save. Please generate one first.');
+				return;
+			}
+
+			let savedLessons = JSON.parse(localStorage.getItem('PAALS_SAVED_LESSONS') || '[]');
+			
+			// Generate unique ID
+			const id = Date.now().toString();
+			
+			const lessonToSave = {
+				id: id,
+				topic: currentLessonPlan.topic,
+				grade: currentLessonPlan.grade,
+				content: currentLessonPlan.content,
+				timestamp: new Date().toISOString()
+			};
+
+			savedLessons.unshift(lessonToSave);
+			localStorage.setItem('PAALS_SAVED_LESSONS', JSON.stringify(savedLessons));
+			
+			alert(`Lesson "${currentLessonPlan.topic}" saved successfully!`);
+			console.log('Lesson saved:', lessonToSave);
+			loadSavedLessonsList();
+		}
+
+		/**
+		 * Load a saved lesson plan
+		 */
+		function loadSavedLesson(id) {
+			let savedLessons = JSON.parse(localStorage.getItem('PAALS_SAVED_LESSONS') || '[]');
+			const lesson = savedLessons.find(l => l.id === id);
+			
+			if (!lesson) {
+				alert('Lesson not found.');
+				return;
+			}
+
+			currentLessonPlan = lesson;
+			
+			// Populate form and display
+			document.forms['input']['topic-input'].value = lesson.topic;
+			document.forms['input']['grades'].value = lesson.grade;
+			
+			// Render markdown
+			const htmlContent = marked.parse(lesson.content);
+			document.getElementById('out-container').innerHTML = htmlContent;
+			document.getElementById('download-btn').style.display = 'inline-block';
+		document.getElementById('copy-btn').style.display = 'inline-block';
+		document.getElementById('save-btn').style.display = 'inline-block';
+			console.log('Loaded lesson:', lesson);
+		}
+
+		/**
+		 * Delete a saved lesson plan
+		 */
+		function deleteSavedLesson(id) {
+			if (!confirm('Are you sure you want to delete this lesson?')) {
+				return;
+			}
+
+			let savedLessons = JSON.parse(localStorage.getItem('PAALS_SAVED_LESSONS') || '[]');
+			savedLessons = savedLessons.filter(l => l.id !== id);
+			localStorage.setItem('PAALS_SAVED_LESSONS', JSON.stringify(savedLessons));
+			
+			console.log('Deleted lesson with id:', id);
+			loadSavedLessonsList();
+		}
+
+		/**
+		 * Load and display the list of saved lessons
+		 */
+		function loadSavedLessonsList() {
+			let savedLessons = JSON.parse(localStorage.getItem('PAALS_SAVED_LESSONS') || '[]');
+			const listContainer = document.getElementById('saved-lessons-list');
+			
+			if (savedLessons.length === 0) {
+				document.getElementById('saved-lessons-container').style.display = 'none';
+				return;
+			}
+
+			document.getElementById('saved-lessons-container').style.display = 'block';
+			listContainer.innerHTML = '';
+			
+			savedLessons.forEach(lesson => {
+				const date = new Date(lesson.timestamp).toLocaleDateString();
+				const time = new Date(lesson.timestamp).toLocaleTimeString();
+				
+				const li = document.createElement('li');
+				li.innerHTML = `
+					<div class="lesson-info">
+						<div class="lesson-title">${lesson.topic}</div>
+						<div class="lesson-meta">Grade: ${lesson.grade} | ${date} ${time}</div>
+					</div>
+					<div class="lesson-buttons">
+						<button class="lesson-item-btn" onclick="loadSavedLesson('${lesson.id}')">📖 Load</button>
+						<button class="lesson-item-btn delete" onclick="deleteSavedLesson('${lesson.id}')">🗑️ Delete</button>
+					</div>
+				`;
+				listContainer.appendChild(li);
+			});
+			
+			console.log(`Loaded ${savedLessons.length} saved lessons`);
+		}
+
+		async function toggleAdvancedOptions(sender) {
+			var shouldHide = !sender.checked;
+			console.log(` ${shouldHide ? "Hiding" : "Showing"} the 'Advanced Options' menu...`);
+			document.getElementById('advanced-options').hidden = shouldHide;
+		}
+
+		async function alertComplexity(sender) {
+			console.log(`> Complexity selected: ${(sender.value)}`);
+		}
+	
+		
+
+		/*
+		async function initCloseBtn(sender) {
+			var _modalWindow = document.getElementById('loadMe');
+			
+			var closeBtn = document.querySelector(".close");
+			if (closeBtn) {
+				closeBtn.addEventListener("click", function() {
+					document.getElementById('loadMe').hidden = true;
+				});
+
+				closeBtn.addEventListener("escape", function() {
+					//$('#loadMe').modal('hide');
+					document.getElementById('loadMe').hidden = true;
+				});
+			}	
+		}
+		*/
+
+		function initCloseBtn() {
+			const modalEl = document.getElementById('loadMe');
+			const closeBtn = modalEl?.querySelector('.close');
+			
+			if (!modalEl || !closeBtn) {
+				console.log('Modal or close button not found');
+				return;
+			}
+
+			// Click closes - bind the function properly
+			closeBtn.onclick = (e) => {
+				e.preventDefault();
+				closeModalLoader();
+				return false;
+			};
+
+			// Escape key closes
+			document.addEventListener('keydown', (e) => {
+				if (e.key === 'Escape' && modalEl.style.display === 'block') {
+					closeModalLoader();
+				}
+			});
+		}
+
+		function closeModalLoader() {
+			const modalEl = document.getElementById('loadMe');
+			if (!modalEl) return;
+
+			console.log('Closing modal...');
+
+			// Hide manually with CSS classes
+			modalEl.classList.remove('show');
+			modalEl.style.display = 'none';
+			modalEl.setAttribute('aria-hidden', 'true');
+			console.log('Modal hidden');
+
+			// Clean up backdrop and body state
+			removeModalListeners();
+		}
+
+		function showModal() {
+			const modalEl = document.getElementById('loadMe');
+			if (!modalEl) return;
+
+			console.log('Showing modal...');
+			
+			// Show with CSS classes
+			modalEl.style.display = 'block';
+			modalEl.classList.add('show');
+			modalEl.setAttribute('aria-hidden', 'false');
+			
+			console.log('Modal shown');
+		}
+
+
+		function removeModalListeners(sender=null) {
+			// Remove any leftover backdrops (common if a modal lib created them)
+			document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+			document.body.classList.remove('modal-open');
+			document.body.style.removeProperty('padding-right');
+		}
+
+		function resetModalForReuse() {
+			const modalEl = document.getElementById('loadMe');
+			if (!modalEl) return;
+
+			// Ensure element is not hidden
+			if (modalEl.hasAttribute('hidden')) {
+				modalEl.removeAttribute('hidden');
+			}
+			modalEl.hidden = false;
+			modalEl.style.display = '';
+			modalEl.classList.remove('show');
+			modalEl.setAttribute('aria-hidden', 'false');
+
+			// Clean up any leftover backdrops and body classes
+			document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+			document.body.classList.remove('modal-open');
+			document.body.style.removeProperty('padding-right');
+		}
+
+	</script>
+</head>
+
+<body>
+	<style>
+		.markmap>svg {
+			width: 100%;
+			height: 300px;
+		}
+	</style>
+	<div class="wrapper">
+		<div id="title-container" style="margin-left: 5%; width: 95%;">
+			<h1>AI Lesson Plan Generator</h1>
+		<!--
+            <sub>AI version: ChatGPT 4o</sub>
+      -->
+			<br><br>
+		</div>
+		<br>
+		<div class="container" style="width: 95%;">
+			<form id="input">
+				<div id='grade-field' class='field'>
+					<label for='grades'>Grade level: </label>
+					<select name='grades' id='grades' style="font-size: 16px; color: #888;" required>
+						<option value="" selected disabled>Please Make a
+							selection...</option>
+						<option value='0'>Kindergarten</option>
+						<option value='1'>1st Grade</option>
+						<option value='2'>2nd Grade</option>
+						<option value='3'>3rd Grade</option>
+						<option value='4'>4th Grade</option>
+						<option value='5'>5th Grade</option>
+						<option value='6'>6th Grade</option>
+						<option value='7'>7th Grade</option>
+						<option value='8'>8th Grade</option>
+						<option value='9'>9th Grade</option>
+						<option value='10'>10th Grade</option>
+						<option value='11'>11th Grade</option>
+						<option value='12'>12th Grade</option>
+						<option value='13'>Post-Secondary</option>
+					</select>
+				</div>
+				
+				<!-- API Key Configuration -->
+			<div id='api-key-field' class='field'>
+				<label for='api-key-input' style="font-weight: bold;">OpenAI API Key (Optional):</label><br>
+				<small>Leave blank to use default key. Your key is stored only in your browser's local storage.</small>
+				<input id="api-key-input" name="api-key-input" type="password" 
+					placeholder="sk-..." 
+					style="width: 100%; margin-top: 8px; margin-bottom: 8px;" 
+					<button type="button" onclick="updateApiKey()" style="margin-right: 5px;">Save API Key</button>
+					<button type="button" onclick="clearApiKey()">Clear Key</button>
+				</div>
+				
+				<div id="form-inputs">
+					<br>
+					<!--
+					<label for="topic-input">Lesson topic: </label>
+					-->
+
+					<!--
+					<div name="topic-input-label" id="topic-input-label">Lesson topic:</div>
+					-->
+
+					<!-- <div name= "topic-input-label" id="topic-input-label" style="font-size: 14px; color: #666;">Lesson topic:</div>-->
+
+					<label for="topic-input">Lesson topic: </label>
+					<input id="topic-input" name="topic-input"
+						placeholder="The war of 1812, photosynthesis, or any other lesson topic."
+					style="width: 100%; box-sizing: border-box;" required>
+
+ <!-- 
+ asdfasfdasdf
+-->
+
+<!--				
+					<br>
+                    <label for="complexity-slider" hidden="true">Complexity:</label>
+ 
+ 
+                    <input 
+                    type="range" id="complexity-slider" name="complexity-slider" aria-valuemin="2048" aria-valuemax="4095" aria-valuenow="4095" value="4095" role="slider" hidden="true" disabled="true">
+					-->
+					
+
+					<label for="chkBx">Advanced options:</label>
+					<input name="chkBx" id="chkBx" type="checkbox" onchange="toggleAdvancedOptions(this);">
+					<div name="advanced-options" id="advanced-options" hidden="true">
+						<ul id="options-list">
+							<li style="padding-left: 0%;">
+								<div id="complexity-container">
+									<label for="complexity">Results Complexity:</label>
+									<select name="complexity" id="complexity" oninput="alertComplexity(this);">
+												 
+												<!--
+												onchange="toggleAdvancedOptions(this);"
+												-->
+												oninput="alertComplexity(this);"
+												>
+
+										<option value=4095 selected disabled hidden>Default (Maximum)</option>
+										<option value=2048>Simple</option>
+										<option value=3072>Moderate</option>
+										<option value=4095>Maximum</option>
+									</select>
+								</div>
+							</li>
+						</ul>
+
+
+					</div>
+					<br>
+					<br>
+
+						<!--
+					<button id="submit-btn" type="button" title="Submit" onclick="generateResults()"
+						method="post">Submit</button>
+						-->
+
+				
+						<!-- 
+				
+					<button id="submit-btn" type="button" title="Submit" onclick="generateResults(this)"
+						method="post">Submit</button>
+				-->
+
+					<button id="submit" type="button" title="Submit" onclick="generateResults()">Submit</button>
+					<!-- // -->
+					<br><br>
+					<input name="reply" placeholder="" readonly style="display: none;">
+				</div>
+			</form>
+
+			<p id="output" markup="1" style="white-space: pre-wrap;"></p>
+
+			<button id="theme-toggle" onclick="toggleTheme()" style="position: fixed; top: 20px; right: 20px; z-index: 1000;">🌙 Dark Mode</button>
+
+			<div id="button-group" style="margin-top: 15px;">
+				<button id="download-btn" class="lesson-action-btn" onclick="downloadLesson()" style="display: none;">📥 Download (.md)</button>
+				<button id="copy-btn" class="lesson-action-btn" onclick="copyToClipboard()" style="display: none;">📋 Copy to Clipboard</button>
+				<button id="save-btn" class="lesson-action-btn" onclick="saveLessonPlan()" style="display: none;">💾 Save Lesson</button>
+			</div>
+
+			<div id="out-container" markup="1"></div>
+
+			<!-- Saved Lessons Section -->
+			<div id="saved-lessons-container" style="display: none;">
+				<h2>📚 Your Saved Lessons</h2>
+				<ul id="saved-lessons-list"></ul>
+			</div>
+            
+            
+            
+            <!-- 
+            NOTE: The gif invluded in this portion of code was initially intended to be the 
+             loading spinner/indicator, however I found another solution which scales to any 
+             screen and just uses frame animations. This isn't currently being used, but am 
+             keeping rhe section of code just in case i either need to do something similar elsewhere 
+             and will use this as a reference, or this will remain as a backuo solution 
+             just in case and the dynamic content/popup windows are blocked by tbe client and they
+             have no indicators or warnings so it causes issues sometiems with how I'm rendering
+             the other custom modal widnow that is shown instead amd resizes/arranges itself on the
+             screen depending on the device, which is a massive improvement over everything being 
+             pixelated by default!   
+            -->
+			<div id="wp-block-themeisle-blocks-popup-52fd7daf"
+				class="wp-block-themeisle-blocks-popup is-front has-light-bg" data-open="userAction" data-dismiss=""
+				data-time="1" data-anchor="" data-offset="" data-outside="" data-anchorclose="" aria-hidden="true">
+				<div class="otter-popup__modal_wrap">
+					<div role="presentation" class="otter-popup__modal_wrap_overlay"></div>
+					<div class="otter-popup__modal_content">
+						<div class="otter-popup__modal_body">
+							<figure class="wp-block-coblocks-gif is-resized"><img
+									src="https://media0.giphy.com/media/JFTg9PBtHZz9hHRkBN/giphy.gif" alt="" width="359"
+									height="318" />
+								<figcaption>Loading...</figcaption>
+							</figure>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+			<!-- Modal spinner window -->
+			<div class="modal fade" id="loadMe" tabindex="-1" role="dialog" aria-labelledby="loadMeLabel"
+				style="width: 50px;" data-bs-target="" hidden="false">
+				<div class="modal-dialog modal-sm" role="document">
+					<div class="modal-content">
+						<div class="modal-body text-center">
+							<div class="loader"></div>
+							<button type="button" class="close" aria-label="Close loading dialog" title="Close">
+  								<span aria-hidden="true">&times;</span>
+							</button>
+							<div class="loader-txt">
+								<p>Generating a unique lesson plan using the submitted values&#8230; This will only take a moment!
+                                    <br><br>
+                                    <small>The request's complexity and/or lesson topic may affect results speed.</small>
+                                </p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+</body>
+</html>
+
+
+
+
+
+
